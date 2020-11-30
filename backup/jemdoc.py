@@ -216,13 +216,6 @@ def standardconf():
   [nomenulastbit]
   </div>
   
-  [bodyend]
-  <a title="web analytics" href="http://statcounter.com/"target="_blank"><img
-  src="//c.statcounter.com/11380057/0/ac5ac440/0/" alt="web
-  analytics" style="border:none;"></a>
-  </body>
-  </html>
-  
   [infoblock]
   <div class="infoblock">
   
