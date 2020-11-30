@@ -1,22 +1,14 @@
 
-== Biography
+== Publications
 
-I'm a final-year Ph.D. candidate at the [http://www.cse.cuhk.edu.hk Department of Computer Science and Engineering],  
-[http://www.cuhk.edu.hk/english/index.html The Chinese University of Hong Kong (CUHK)], 
-under the supervision of [http://www.cse.cuhk.edu.hk/~byu/ Prof. Bei Yu] since Fall 2016.
-#under the supervision of [http://www.cse.cuhk.edu.hk/~byu/ Prof. Bei Yu] starting from Fall 2016.
-Previously, I received my bachelor degree in Microelectronics from [http://www.sysu.edu.cn/2012/en/index.htm Sun Yat-sen University (SYSU)] in June, 2016.
-
-My research interests include machine learning on chips, design for manufacturing and physical design.
+=== Journal Papers
 
 
+=== Conference Papers
 
-I'm a final-year Ph.D. candidate at the Department of Computer Science and Engineering, 
-The Chinese University of Hong Kong (CUHK), 
-under the supervision of Prof. Evangeline F.Y. Young 
-since Fall 2017. 
-Before joining CUHK, I received my Bachelor Degree of Electronic & Information Engineering from Sichuan University (SCU).
+- [C3] Bentian Jiang, *Xiaopeng Zhang*, Ran Chen, Gengjie Chen, Peishan Tu, Wei Li, Evangeline F.Y. Young and Bei Yu, 
+“FIT: Fill Insertion Considering Timing”, 
+The 56th Annual Design Automation Conference (DAC), San Francisco, CA, USA, June 24–29, 2019.
 
-My research interests include design for manufacturability and physical design in VLSI CAD.
 
-[http://yuzhe630.github.io/cv/cv_Yuzhe.pdf *My Resume/CV*]
+
