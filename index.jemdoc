@@ -18,10 +18,10 @@
 
 #include{src/publication.jemdoc}
 
-#include{src/experience.jemdoc}
+##include{src/experience.jemdoc}
 
-#include{src/award.jemdoc}
+##include{src/award.jemdoc}
 
-# #include{src/services.jemdoc}
+## #include{src/services.jemdoc}
 
-#include{src/teaching.jemdoc}
+##include{src/teaching.jemdoc}
