@@ -3,7 +3,7 @@
 
 === Journal Papers
 
-- \[[J1]\] Yong Chen, Hui Zhang, *Xiaopeng Zhang*, and Rui Liu,
+- \[J1\] Yong Chen, Hui Zhang, *Xiaopeng Zhang*, and Rui Liu,
 “Regularized Semi-Nonnegative Matrix Factorization for Hashing”, 
 IEEE Transactions on Multimedia, 2017.
 \[[https://ieeexplore.ieee.org/document/8115178 paper]\]
@@ -12,36 +12,36 @@ IEEE Transactions on Multimedia, 2017.
 
 === Conference Papers
 
-- \[[C6]\] Bentian Jiang, *Xiaopeng Zhang*, Lixin Liu and Evangeline F.Y. Young, 
+- \[C6\] Bentian Jiang, *Xiaopeng Zhang*, Lixin Liu and Evangeline F.Y. Young, 
 “Building up End-to-end Mask Optimization Framework with Self-training”, 
 ACM International Symposium on Physical Design (*ISPD*), Virtual Conference, March 21-24, 2021.
 
 
-- \[[C5]\] Dan Zheng\*, *Xiaopeng Zhang*\*, Chak-Wa Pui, Evangeline F.Y. Young, 
+- \[C5\] Dan Zheng\*, *Xiaopeng Zhang*\*, Chak-Wa Pui, Evangeline F.Y. Young, 
 “Multi-FPGA Co-optimization: Hybrid Routing and Competitive-based Time Division Multiplexing Assignment”, 
 IEEE/ACM Asia and South Pacific Design Automation Conference (*ASPDAC*), Tokyo, Japan, Jan. 18-21, 2021 (* co-first authors).
 
 
-- \[[C4]\] *Xiaopeng Zhang*, James Shiely and Evangeline F.Y. Young, 
+- \[C4\] *Xiaopeng Zhang*, James Shiely and Evangeline F.Y. Young, 
 “Layout Pattern Generation and Legalization with Generative Learning Models”, 
 The 39h IEEE/ACM International Conference on Computer-Aided Design (*ICCAD*), Virtual Conference, Nov. 2-5, 2020. 
 \[[archive/CUP_paper.pdf preprint]\]\[[archive/CUP_slides.pdf slides]\]
 
 
 
-- \[[C3]\] Bentian Jiang\*, Jingsong Chen\*, Jinwei Liu, Lixin Liu, Fangzhou Wang, *Xiaopeng Zhang*, Evangeline F. Y. Young, 
+- \[C3\] Bentian Jiang\*, Jingsong Chen\*, Jinwei Liu, Lixin Liu, Fangzhou Wang, *Xiaopeng Zhang*, Evangeline F. Y. Young, 
 “CU.POKer: Placing DNNs on Wafer-Scale AI Accelerator with Optimal Kernel Sizing”, 
 IEEE/ACM International Conference on Computer-Aided Design (*ICCAD*), Virtual Event, Nov. 2–5, 2020 (* co-first authors).
 
 
 
-- \[[C2]\] Bentian Jiang, *Xiaopeng Zhang*, Ran Chen, Gengjie Chen, Peishan Tu, Wei Li, Evangeline F.Y. Young and Bei Yu, 
+- \[C2\] Bentian Jiang, *Xiaopeng Zhang*, Ran Chen, Gengjie Chen, Peishan Tu, Wei Li, Evangeline F.Y. Young and Bei Yu, 
 “FIT: Fill Insertion Considering Timing”, 
 The 56th Annual Design Automation Conference (*DAC*), San Francisco, CA, USA, June 24–29, 2019.
 \[[https://ieeexplore.ieee.org/document/8806834 paper]\]
 
 
-- \[[C1]\] *Xiaopeng Zhang*, Hui Zhang, Yong Chen, and Xianglong Liu, 
+- \[C1\] *Xiaopeng Zhang*, Hui Zhang, Yong Chen, and Xianglong Liu, 
 “Large-Margin Supervised Hashing”, 
 International Conference on Neural Information Processing (*ICONIP*), 2017.
 \[[https://link.springer.com/chapter/10.1007%2F978-3-319-70087-8_28 paper]\]

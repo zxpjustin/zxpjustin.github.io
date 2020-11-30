@@ -1,22 +1,21 @@
 
-== Biography
+== Honors & Awards
 
-I'm a final-year Ph.D. candidate at the [http://www.cse.cuhk.edu.hk Department of Computer Science and Engineering],  
-[http://www.cuhk.edu.hk/english/index.html The Chinese University of Hong Kong (CUHK)], 
-under the supervision of [http://www.cse.cuhk.edu.hk/~byu/ Prof. Bei Yu] since Fall 2016.
-#under the supervision of [http://www.cse.cuhk.edu.hk/~byu/ Prof. Bei Yu] starting from Fall 2016.
-Previously, I received my bachelor degree in Microelectronics from [http://www.sysu.edu.cn/2012/en/index.htm Sun Yat-sen University (SYSU)] in June, 2016.
+~~~
+{}{table}
+First Place Award at Contest on 
+[https://www.cerebras.net/ispd-2020-contest/ “Wafer-Scale Deep Learning Accelerator Placement”]   | | | | ISPD | | | | | | 2020 ||
 
-My research interests include machine learning on chips, design for manufacturing and physical design.
+Third Place Award at Contest on 
+[http://iccad-contest.org/2019/problems.html “System-level FPGA Routing with Timing Division Multiplexing Technique”]   | | | | ICCAD | | | | | | 2019 ||
+
+Second Place Award at Contest on 
+[http://iccad-contest.org/2018/index.html “Timing-aware Dummy Fill Insertion”]   | | | | ICCAD | | | | | | 2018 ||
+
+Full Postgraduate Studentship   | | | | CUHK | | | | | | 2018 - ||
+
+National Scholarship   | | | | BUAA | | | | | | 2017 ||
+
+~~~
 
 
-
-I'm a final-year Ph.D. candidate at the Department of Computer Science and Engineering, 
-The Chinese University of Hong Kong (CUHK), 
-under the supervision of Prof. Evangeline F.Y. Young 
-since Fall 2017. 
-Before joining CUHK, I received my Bachelor Degree of Electronic & Information Engineering from Sichuan University (SCU).
-
-My research interests include design for manufacturability and physical design in VLSI CAD.
-
-[http://yuzhe630.github.io/cv/cv_Yuzhe.pdf *My Resume/CV*]
