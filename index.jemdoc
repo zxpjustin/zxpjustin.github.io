@@ -11,8 +11,8 @@
 *Office*: Rm 913, Ho Sin Hang Engineering Building, CUHK, Shatin, N.T., Hong Kong SAR \n
 *Email*: xpzhang\[at\]cse.cuhk.edu.hk \n
 
-{{<a href="https://www.linkedin.com/in/yuzhe-ma-275a7bb5" target="<u>blank"><img src="img/linkedin-logo.png" height=30></a>
-<a href="https://scholar.google.com/citations?user=iANUv3MAAAAJ&hl=en&oi=sra" target="<u>blank"><img src="img/cat.jpeg" height=30></a>  }}
+# {{<a href="https://www.linkedin.com/in/yuzhe-ma-275a7bb5" target="<u>blank"><img src="img/linkedin-logo.png" height=30></a>
+# <a href="https://scholar.google.com/citations?user=iANUv3MAAAAJ&hl=en&oi=sra" target="<u>blank"><img src="img/cat.jpeg" height=30></a>  }}
 
 #include{src/biography.jemdoc}
 
