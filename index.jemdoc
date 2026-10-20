@@ -18,9 +18,9 @@
 
 #include{src/publication.jemdoc}
 
-##include{src/experience.jemdoc}
-
 #include{src/award.jemdoc}
+
+#include{src/experience.jemdoc}
 
 ## #include{src/services.jemdoc}
 

@@ -1,22 +1,10 @@
 
-== Biography
+== Experiences
 
-I'm a final-year Ph.D. candidate at the [http://www.cse.cuhk.edu.hk Department of Computer Science and Engineering],  
-[http://www.cuhk.edu.hk/english/index.html The Chinese University of Hong Kong (CUHK)], 
-under the supervision of [http://www.cse.cuhk.edu.hk/~byu/ Prof. Bei Yu] since Fall 2016.
-#under the supervision of [http://www.cse.cuhk.edu.hk/~byu/ Prof. Bei Yu] starting from Fall 2016.
-Previously, I received my bachelor degree in Microelectronics from [http://www.sysu.edu.cn/2012/en/index.htm Sun Yat-sen University (SYSU)] in June, 2016.
+- *Principal Engineer | Huawei HiSilicon*
+-- EDA/CAD tool development for custom layout and routing automation, power integrity analysis for 3D ICs, and advanced packaging.
+-- October 2022 – October 2026, Shenzhen, China.
 
-My research interests include machine learning on chips, design for manufacturing and physical design.
-
-
-
-I'm a final-year Ph.D. candidate at the Department of Computer Science and Engineering, 
-The Chinese University of Hong Kong (CUHK), 
-under the supervision of Prof. Evangeline F.Y. Young 
-since Fall 2017. 
-Before joining CUHK, I received my Bachelor Degree of Electronic & Information Engineering from Sichuan University (SCU).
-
-My research interests include design for manufacturability and physical design in VLSI CAD.
-
-[http://yuzhe630.github.io/cv/cv_Yuzhe.pdf *My Resume/CV*]
+- *Research Intern | Huawei Hong Kong Research Center*
+-- AI-driven root cause analysis using layout-aware scan diagnosis for yield improvement.
+-- June 2021 – December 2021, Hong Kong SAR, China.
