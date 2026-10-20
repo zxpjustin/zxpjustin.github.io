@@ -155,6 +155,11 @@ h2 {
 	font-size: 125%;
 }
 
+/* 让首个章节从头像下方开始，避免头像挤占简介正文。 */
+#layout-content > h2:first-of-type {
+	clear: both;
+}
+
 h2 + h3 {
     padding-top: 0.2em;
 }
