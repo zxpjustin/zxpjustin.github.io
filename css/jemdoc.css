@@ -377,3 +377,42 @@ table.imgtable, table.imgtable td {
     border: none;
     text-align: left;
 }
+
+/* 长标题和链接在窄屏内换行，避免横向撑开页面。 */
+#layout-content {
+	overflow-wrap: anywhere;
+}
+
+/* 荣誉表按内容排列，年份保持在同一行。 */
+#layout-content > table {
+	width: 100%;
+	border-collapse: collapse;
+}
+#layout-content > table td {
+	padding: 0.35em 0.5em;
+	vertical-align: top;
+}
+#layout-content > table td:last-child {
+	white-space: nowrap;
+	text-align: right;
+}
+
+/* 手机端减少边距，保留照片与简介之间的浮动边界。 */
+@media screen and (max-width: 600px) {
+	body {
+		margin: 0;
+		padding: 16px;
+	}
+	#layout-content {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	#subtitle img {
+		max-width: 30vw;
+		height: auto;
+		margin-left: 12px;
+	}
+	#layout-content > table {
+		font-size: 0.9em;
+	}
+}

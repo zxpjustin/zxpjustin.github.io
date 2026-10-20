@@ -1,1 +1,2 @@
-python jemdoc.py index.jemdoc
+python3 jemdoc.py index.jemdoc biography.jemdoc
+python3 -m unittest discover -s tests -v

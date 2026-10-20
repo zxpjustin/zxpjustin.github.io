@@ -1,1 +1,11 @@
 theme: jekyll-theme-minimal
+# 仅发布生成页面和资源，避免旧模板及开发文件成为独立网页。
+exclude:
+  - backup
+  - tests
+  - jemdoc.py
+  - cmd.txt
+  - README.md
+  - index.jemdoc
+  - biography.jemdoc
+  - src

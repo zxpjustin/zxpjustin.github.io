@@ -1,4 +1,5 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 """jemdoc version 0.7.3, 2012-11-27."""
 
@@ -26,33 +27,46 @@ import sys
 import os
 import re
 import time
-import StringIO
+import io
 from subprocess import *
 import tempfile
 
+def readsource(path):
+  """@brief 以 UTF-8 读取源文件并提供按字符定位的缓冲区。
+  @param path 源文件路径。
+  @return 支持字符位置回退的文本缓冲区。
+  """
+  with open(path, encoding='utf-8') as source:
+    return io.StringIO(source.read())
+
 def info():
-  print __doc__
-  print 'Platform: ' + sys.platform + '.'
-  print 'Python: %s, located at %s.' % (sys.version[:5], sys.executable)
-  print 'Equation support:',
+  """@brief 输出生成器版本和公式工具状态。
+  """
+  print(__doc__)
+  print('Platform: ' + sys.platform + '.')
+  print('Python: %s, located at %s.' % (sys.version[:5], sys.executable))
+  print('Equation support:', end=' ')
   (supported, message) = testeqsupport()
   if supported:
-    print 'yes.'
+    print('yes.')
   else:
-    print 'no.'
-  print message
+    print('no.')
+  print(message)
 
 def testeqsupport():
+  """@brief 检测 LaTeX 和 dvipng 是否可用。
+  @return 转换结果或检测结果。
+  """
   supported = True
   msg = ''
-  p = Popen('latex --version', shell=True, stdout=PIPE, stderr=PIPE)
+  p = Popen('latex --version', shell=True, stdout=PIPE, text=True, stderr=PIPE)
   rc = p.wait()
   if rc != 0:
     msg += '  latex: not found.\n'
     supported = False
   else:
     msg += '  latex: ' + p.stdout.readlines()[0].rstrip() + '.\n'
-  p = Popen('dvipng --version', shell=True, stdout=PIPE, stderr=PIPE)
+  p = Popen('dvipng --version', shell=True, stdout=PIPE, text=True, stderr=PIPE)
   rc = p.wait()
   if rc != 0:
     msg += '  dvipng: not found.\n'
@@ -65,6 +79,15 @@ def testeqsupport():
 class controlstruct(object):
   def __init__(self, infile, outfile=None, conf=None, inname=None, eqs=True,
          eqdir='eqs', eqdpi=130):
+    """@brief 初始化文件解析与页面生成状态。
+    @param infile 输入文本流。
+    @param outfile 输出文本流。
+    @param conf 页面模板配置。
+    @param inname 输入文件名。
+    @param eqs 控制该转换步骤的参数。
+    @param eqdir 控制该转换步骤的参数。
+    @param eqdpi 控制该转换步骤的参数。
+    """
     self.inname = inname
     self.inf = infile
     self.outf = outfile
@@ -84,14 +107,21 @@ class controlstruct(object):
     self.baseline = None
 
   def pushfile(self, newfile):
+    """@brief 切换到包含文件并保存当前文件状态。
+    @param newfile 包含文件路径。
+    """
     self.otherfiles.insert(0, self.inf)
-    self.inf = open(newfile, 'rb')
+    self.inf = readsource(newfile)
 
   def nextfile(self):
+    """@brief 恢复上一层包含文件的解析状态。
+    """
     self.inf.close()
     self.inf = self.otherfiles.pop(0)
 
 def showhelp():
+  """@brief 显示命令行用法。
+  """
   a = """Usage: jemdoc [OPTIONS] [SOURCEFILE] 
   Produces html markup from a jemdoc SOURCEFILE.
 
@@ -127,23 +157,25 @@ def showhelp():
     else:
       b += l
 
-  print b
+  print(b)
 
 #<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 def standardconf():
+  """@brief 返回本站默认 HTML 模板。
+  @return 默认模板配置文本。
+  """
   a = """[firstbit]
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
   <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
-  <meta name="keywords" content="Yuzhe Ma, CUHK-CSE" />
-  <meta name="description" content="Yuzhe Ma's Homepage, CUHK-CSE" />
+  <meta name="keywords" content="Xiaopeng Zhang, 张晓鹏, VLSI CAD" />
+  <meta name="description" content="Personal homepage of Xiaopeng Zhang (张晓鹏): research, publications, and education." />
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   
   [defaultcss]
-  <link rel="stylesheet" href="jemdoc.css" type="text/css" />
-  <link rel="shortcut icon" href="img/logo-cuhk2.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   [windowtitle]
   # used in header for window title.
@@ -281,6 +313,10 @@ class NoEqSupport(Exception):
   pass
 
 def raisejandal(msg, line=0):
+  """@brief 抛出包含行号的解析错误。
+  @param msg 错误信息。
+  @param line 源码行号。
+  """
   if line == 0:
     s = "%s" % msg
   else:
@@ -288,6 +324,10 @@ def raisejandal(msg, line=0):
   raise JandalError(s)
 
 def readnoncomment(f):
+  """@brief 读取下一行非注释配置内容。
+  @param f 文件流或解析状态。
+  @return 转换结果或检测结果。
+  """
   l = f.readline()
   if l == '':
     return l
@@ -297,12 +337,16 @@ def readnoncomment(f):
     return l.rstrip() + '\n' # leave just one \n and no spaces etc.
 
 def parseconf(cns):
+  """@brief 合并默认与自定义模板配置。
+  @param cns 自定义配置文件列表。
+  @return 模板名称到模板文本的映射。
+  """
   syntax = {}
   warn = False # jem. make configurable?
   # manually add the defaults as a file handle.
-  fs = [StringIO.StringIO(standardconf())]
+  fs = [io.StringIO(standardconf())]
   for sname in cns:
-    fs.append(open(sname, 'rb'))
+    fs.append(readsource(sname))
 
   for f in fs:
     while pc(controlstruct(f)) != '':
@@ -325,7 +369,13 @@ def parseconf(cns):
   return syntax
 
 def insertmenuitems(f, mname, current, prefix):
-  m = open(mname, 'rb')
+  """@brief 解析菜单并输出菜单项。
+  @param f 文件流或解析状态。
+  @param mname 控制该转换步骤的参数。
+  @param current 控制该转换步骤的参数。
+  @param prefix 控制该转换步骤的参数。
+  """
+  m = readsource(mname)
   while pc(controlstruct(m)) != '':
     l = readnoncomment(m)
     l = l.strip()
@@ -370,10 +420,19 @@ def insertmenuitems(f, mname, current, prefix):
   m.close()
 
 def out(f, s):
+  """@brief 向输出流写入文本。
+  @param f 文件流或解析状态。
+  @param s 待处理文本。
+  """
   f.write(s)
 
 def hb(f, tag, content1, content2=None):
-  """Writes out a halfblock (hb)."""
+  """@brief 替换模板占位符并输出片段。
+  @param f 文件流或解析状态。
+  @param tag 控制该转换步骤的参数。
+  @param content1 控制该转换步骤的参数。
+  @param content2 控制该转换步骤的参数。
+  """
 
   if content1 is None:
     content1 = ""
@@ -386,7 +445,11 @@ def hb(f, tag, content1, content2=None):
     out(f, r)
 
 def pc(f, ditchcomments=True):
-  """Peeks at next character in the file."""
+  """@brief 预览下一个字符并处理注释及包含文件。
+  @param f 文件流或解析状态。
+  @param ditchcomments 是否跳过注释。
+  @return 预览字符，结束时为空字符串。
+  """
   # Should only be used to look at the first character of a new line.
   c = f.inf.read(1)
   if c: # only undo forward movement if we're not at the end.
@@ -401,7 +464,7 @@ def pc(f, ditchcomments=True):
     if c == '\\':
       c += pc(f)
 
-    f.inf.seek(-1, 1)
+    f.inf.seek(f.inf.tell() - 1)
   elif f.otherfiles:
     f.nextfile()
     return pc(f, ditchcomments)
@@ -409,10 +472,15 @@ def pc(f, ditchcomments=True):
   return c
 
 def doincludes(f, l):
+  """@brief 处理普通或原始文件包含指令。
+  @param f 文件流或解析状态。
+  @param l 当前源码行。
+  @return 是否识别并处理了包含指令。
+  """
   ir = 'includeraw{'
   i = 'include{'
   if l.startswith(ir):
-    nf = open(l[len(ir):-2], 'rb')
+    nf = readsource(l[len(ir):-2])
     f.outf.write(nf.read())
     nf.close()
   elif l.startswith(i):
@@ -423,7 +491,12 @@ def doincludes(f, l):
   return True
 
 def nl(f, withcount=False, codemode=False):
-  """Get input file line."""
+  """@brief 读取并规范化下一行源码。
+  @param f 文件流或解析状态。
+  @param withcount 是否返回标记数量。
+  @param codemode 是否保留代码格式。
+  @return 源码行或源码行与标记数量。
+  """
   s = f.inf.readline()
   if not s and f.otherfiles:
     f.nextfile()
@@ -460,7 +533,12 @@ def nl(f, withcount=False, codemode=False):
     return s
 
 def np(f, withcount=False, eatblanks=True):
-  """Gets the next paragraph from the input file."""
+  """@brief 读取下一段源码。
+  @param f 文件流或解析状态。
+  @param withcount 是否返回标记数量。
+  @param eatblanks 是否跳过空行。
+  @return 源码段落或段落与标记数量。
+  """
   # New paragraph markers signalled by characters in following tuple.
   if withcount:
     (s, c) = nl(f, withcount)
@@ -480,10 +558,17 @@ def np(f, withcount=False, eatblanks=True):
     return s[:-1]
 
 def quote(s):
+  """@brief 转义 jemdoc 特殊字符。
+  @param s 待处理文本。
+  @return 转换结果或检测结果。
+  """
   return re.sub(r"""[\\*/+"'<>&$%\.~[\]-]""", r'\\\g<0>', s)
 
 def replacequoted(b):
-  """Quotes {{raw html}} sections."""
+  """@brief 保护内联原始文本。
+  @param b 待转换文本。
+  @return 转换结果或检测结果。
+  """
 
   r = re.compile(r'\{\{(.*?)\}\}', re.M + re.S)
   m = r.search(b)
@@ -499,6 +584,10 @@ def replacequoted(b):
 def replacepercents(b):
   # replace %sections% as +{{sections}}+. Do not replace if within a link.
 
+  """@brief 处理百分号包围的内联代码。
+  @param b 待转换文本。
+  @return 转换结果或检测结果。
+  """
   r = re.compile(r'(?<!\\)%(.*?)(?<!\\)%', re.M + re.S)
   m = r.search(b)
   while m:
@@ -515,6 +604,11 @@ def replacepercents(b):
 
 def replaceequations(b, f):
   # replace $sections$ and \(sections\) as equations.
+  """@brief 替换公式标记并生成公式图片。
+  @param b 待转换文本。
+  @param f 文件流或解析状态。
+  @return 转换结果或检测结果。
+  """
   rs = ((re.compile(r'(?<!\\)\$(.*?)(?<!\\)\$', re.M + re.S), False),
      (re.compile(r'(?<!\\)\\\((.*?)(?<!\\)\\\)', re.M + re.S), True))
   for (r, wl) in rs:
@@ -538,8 +632,8 @@ def replaceequations(b, f):
         # Check that the tools we need exist.
         (supported, message) = testeqsupport()
         if not supported:
-          print 'WARNING: equation support disabled.'
-          print message
+          print('WARNING: equation support disabled.')
+          print(message)
           f.eqsupport = False
           return b
 
@@ -578,6 +672,10 @@ def replaceequations(b, f):
 
 def replaceimages(b):
   # works with [img{width}{height}{alttext} location caption].
+  """@brief 将图片语法转换为 HTML。
+  @param b 待转换文本。
+  @return 转换结果或检测结果。
+  """
   r = re.compile(r'(?<!\\)\[img((?:\{.*?\}){,3})\s(.*?)(?:\s(.*?))?(?<!\\)\]',
            re.M + re.S)
   m = r.search(b)
@@ -615,6 +713,10 @@ def replaceimages(b):
 
 def replacelinks(b):
   # works with [link.html new link style].
+  """@brief 将链接语法转换为 HTML。
+  @param b 待转换文本。
+  @return 转换结果或检测结果。
+  """
   r = re.compile(r'(?<!\\)\[(.*?)(?:\s(.*?))?(?<!\\)\]', re.M + re.S)
   m = r.search(b)
   while m:
@@ -647,7 +749,12 @@ def replacelinks(b):
   return b
 
 def br(b, f, tableblock=False):
-  """Does simple text replacements on a block of text. ('block replacements')"""
+  """@brief 转换段落中的格式与链接标记。
+  @param b 待转换文本。
+  @param f 文件流或解析状态。
+  @param tableblock 控制该转换步骤的参数。
+  @return 转换结果或检测结果。
+  """
 
   # Deal with environment variables (say, for Michael Grant).
   r = re.compile(r"!\$(\w{2,})\$!", re.M + re.S)
@@ -655,9 +762,9 @@ def br(b, f, tableblock=False):
   for m in r.findall(b):
     repl = os.environ.get(m)
     if repl == None:
-      b = re.sub("!\$%s\$!" % m, 'FAILED_MATCH_' + m, b)
+      b = re.sub("!\\$%s\\$!" % m, 'FAILED_MATCH_' + m, b)
     else:
-      b = re.sub("!\$%s\$!" % m, repl, b)
+      b = re.sub("!\\$%s\\$!" % m, repl, b)
 
   # Deal with literal backspaces.
   if f.eqs and f.eqsupport:
@@ -779,7 +886,10 @@ def br(b, f, tableblock=False):
   return b
 
 def allreplace(b):
-  """Replacements that should be done on everything."""
+  """@brief 执行最终特殊字符替换。
+  @param b 待转换文本。
+  @return 转换结果或检测结果。
+  """
   r = re.compile(r"(?<!\\)&", re.M + re.S)
   b = re.sub(r, r'&amp;', b)
 
@@ -792,6 +902,10 @@ def allreplace(b):
   return b
 
 def pyint(f, l):
+  """@brief 输出 Python 交互示例。
+  @param f 文件流或解析状态。
+  @param l 当前源码行。
+  """
   l = l.rstrip()
   l = allreplace(l)
 
@@ -804,6 +918,10 @@ def pyint(f, l):
     out(f, l + '\n')
 
 def putbsbs(l):
+  """@brief 保护代码文本中的反斜线。
+  @param l 当前源码行。
+  @return 转换结果或检测结果。
+  """
   for i in range(len(l)):
     l[i] = '\\b' + l[i] + '\\b'
 
@@ -811,6 +929,10 @@ def putbsbs(l):
 
 def gethl(lang):
   # disable comments by default, by choosing unlikely regex.
+  """@brief 获取指定语言的高亮规则。
+  @param lang 控制该转换步骤的参数。
+  @return 转换结果或检测结果。
+  """
   d = {'strings':False}
   if lang in ('py', 'python'):
     d['statement'] = ['break', 'continue', 'del', 'except', 'exec',
@@ -826,7 +948,7 @@ def gethl(lang):
     d['special'] = ['cols', 'optvar', 'param', 'problem', 'norm2', 'norm1',
             'value', 'minimize', 'maximize', 'rows', 'rand',
             'randn', 'printval', 'matrix']
-    d['error'] = ['\w*Error',]
+    d['error'] = ['\\w*Error',]
     d['commentuntilend'] = '#'
     d['strings'] = True
   elif lang in ['c', 'c++', 'cpp']:
@@ -835,7 +957,7 @@ def gethl(lang):
             'clock_t', 'struct', 'long', 'extern', 'char']
     d['operator'] = ['#include.*', '#define', '@pyval{', '}@', '@pyif{',
              '@py{']
-    d['error'] = ['\w*Error',]
+    d['error'] = ['\\w*Error',]
     d['commentuntilend'] = ['//', '/*', ' * ', '*/']
   elif lang in ('rb', 'ruby'):
     d['statement'] = putbsbs(['while', 'until', 'unless', 'if', 'elsif',
@@ -844,7 +966,7 @@ def gethl(lang):
     d['operator'] = putbsbs(['and', 'not', 'or'])
     d['builtin'] = putbsbs(['true', 'false', 'require', 'warn'])
     d['special'] = putbsbs(['IO'])
-    d['error'] = putbsbs(['\w*Error',])
+    d['error'] = putbsbs(['\\w*Error',])
     d['commentuntilend'] = '#'
     d['strings'] = True
     d['strings'] = True
@@ -862,13 +984,13 @@ def gethl(lang):
     d['builtin'] = putbsbs(['gem', 'gcc', 'python', 'curl', 'wget', 'ssh',
                 'latex', 'find', 'sed', 'gs', 'grep', 'tee',
                 'gzip', 'killall', 'echo', 'touch',
-                'ifconfig', 'git', '(?<!\.)tar(?!\.)'])
+                'ifconfig', 'git', '(?<!\\.)tar(?!\\.)'])
     d['commentuntilend'] = '#'
     d['strings'] = True
   elif lang == 'matlab':
     d['statement'] = putbsbs(['max', 'min', 'find', 'rand', 'cumsum', 'randn', 'help',
                      'error', 'if', 'end', 'for'])
-    d['operator'] = ['&gt;', 'ans =', '>>', '~', '\.\.\.']
+    d['operator'] = ['&gt;', 'ans =', '>>', '~', '\\.\\.\\.']
     d['builtin'] = putbsbs(['csolve'])
     d['commentuntilend'] = '%'
     d['strings'] = True
@@ -883,6 +1005,11 @@ def gethl(lang):
   return d
 
 def language(f, l, hl):
+  """@brief 按语言规则输出代码高亮。
+  @param f 文件流或解析状态。
+  @param l 当前源码行。
+  @param hl 控制该转换步骤的参数。
+  """
   l = l.rstrip()
   l = allreplace(l)
   # handle strings.
@@ -938,12 +1065,20 @@ def language(f, l, hl):
 
 def geneq(f, eq, dpi, wl, outname):
   # First check if there is an existing file.
+  """@brief 生成公式图片并维护深度缓存。
+  @param f 文件流或解析状态。
+  @param eq 控制该转换步骤的参数。
+  @param dpi 控制该转换步骤的参数。
+  @param wl 控制该转换步骤的参数。
+  @param outname 控制该转换步骤的参数。
+  @return 公式基线深度及图片路径。
+  """
   eqname = os.path.join(f.eqdir, outname + '.png')
 
   eqdepths = {}
   if f.eqcache:
     try:
-      dc = open(os.path.join(f.eqdir, '.eqdepthcache'), 'rb')
+      dc = open(os.path.join(f.eqdir, '.eqdepthcache'), encoding='utf-8')
       for l in dc:
         a = l.split()
         eqdepths[a[0]] = int(a[1])
@@ -952,22 +1087,22 @@ def geneq(f, eq, dpi, wl, outname):
       if os.path.exists(eqname) and eqname in eqdepths:
         return (eqdepths[eqname], eqname)
     except IOError:
-      print 'eqdepthcache read failed.'
+      print('eqdepthcache read failed.')
 
   # Open tex file.
   tempdir = tempfile.gettempdir()
   fd, texfile = tempfile.mkstemp('.tex', '', tempdir, True)
   basefile = texfile[:-4]
-  g = os.fdopen(fd, 'wb')
+  g = os.fdopen(fd, 'w', encoding='utf-8')
 
-  preamble = '\documentclass{article}\n'
+  preamble = '\\documentclass{article}\n'
   for p in f.eqpackages:
-    preamble += '\usepackage{%s}\n' % p
+    preamble += '\\usepackage{%s}\n' % p
   for p in f.texlines:
     # Replace \{ and \} in p with { and }.
     # XXX hack.
     preamble += re.sub(r'\\(?=[{}])', '', p + '\n')
-  preamble += '\pagestyle{empty}\n\\begin{document}\n'
+  preamble += '\\pagestyle{empty}\n\\begin{document}\n'
   g.write(preamble)
   
   # Write the equation itself.
@@ -977,7 +1112,7 @@ def geneq(f, eq, dpi, wl, outname):
     g.write('$%s$' % eq)
 
   # Finish off the tex file.
-  g.write('\n\\newpage\n\end{document}')
+  g.write('\n\\newpage\n\\end{document}')
   g.close()
 
   exts = ['.tex', '.aux', '.dvi', '.log']
@@ -985,21 +1120,21 @@ def geneq(f, eq, dpi, wl, outname):
     # Generate the DVI file
     latexcmd = 'latex -file-line-error-style -interaction=nonstopmode ' + \
          '-output-directory %s %s' % (tempdir, texfile)
-    p = Popen(latexcmd, shell=True, stdout=PIPE)
+    p = Popen(latexcmd, shell=True, stdout=PIPE, text=True)
     rc = p.wait()
     if rc != 0:
       for l in p.stdout.readlines():
-        print '  ' + l.rstrip()
+        print('  ' + l.rstrip())
       exts.remove('.tex')
       raise Exception('latex error')
 
     dvifile = basefile + '.dvi'
     dvicmd = 'dvipng --freetype0 -Q 9 -z 3 --depth -q -T tight -D %i -bg Transparent -o %s %s' % (dpi, eqname, dvifile)
     # discard warnings, as well.
-    p = Popen(dvicmd, shell=True, stdout=PIPE, stderr=PIPE)
+    p = Popen(dvicmd, shell=True, stdout=PIPE, text=True, stderr=PIPE)
     rc = p.wait()
     if rc != 0:
-      print p.stderr.readlines()
+      print(p.stderr.readlines())
       raise Exception('dvipng error')
     depth = int(p.stdout.readlines()[-1].split('=')[-1])
   finally:
@@ -1012,14 +1147,18 @@ def geneq(f, eq, dpi, wl, outname):
   # Update the cache if we're using it.
   if f.eqcache and eqname not in eqdepths:
     try:
-      dc = open(os.path.join(f.eqdir, '.eqdepthcache'), 'ab')
+      dc = open(os.path.join(f.eqdir, '.eqdepthcache'), 'a', encoding='utf-8')
       dc.write(eqname + ' ' + str(depth) + '\n')
       dc.close()
     except IOError:
-      print 'eqdepthcache update failed.'
+      print('eqdepthcache update failed.')
   return (depth, eqname)
 
 def dashlist(f, ordered=False):
+  """@brief 解析并输出有序或无序列表。
+  @param f 文件流或解析状态。
+  @param ordered 控制该转换步骤的参数。
+  """
   level = 0
 
   if ordered:
@@ -1057,6 +1196,9 @@ def dashlist(f, ordered=False):
     out(f.outf, '\n</li>\n</%s>\n' % ul)
 
 def colonlist(f):
+  """@brief 解析并输出定义列表。
+  @param f 文件流或解析状态。
+  """
   out(f.outf, '<dl>\n')
   while pc(f) == ':':
     s = np(f, eatblanks=False)
@@ -1076,6 +1218,10 @@ def colonlist(f):
   out(f.outf, '</dl>\n')
 
 def codeblock(f, g):
+  """@brief 解析并输出代码块。
+  @param f 文件流或解析状态。
+  @param g 控制该转换步骤的参数。
+  """
   if g[1] == 'raw':
     raw = True
     ext_prog = None
@@ -1127,7 +1273,7 @@ def codeblock(f, g):
         out(f.outf, l)
       elif g[1] == 'jemdoc':
         # doing this more nicely needs python 2.5.
-        for x in ('#', '~', '>>>', '\~', '{'):
+        for x in ('#', '~', '>>>', '\\~', '{'):
           if str(l).lstrip().startswith(x):
             out(f.outf, '</tt><pre class="tthl">')
             out(f.outf, l + '</pre><tt class="tthl">')
@@ -1156,10 +1302,10 @@ def codeblock(f, g):
   if raw:
     return
   elif ext_prog:
-    print 'filtering through %s...' % ext_prog
+    print('filtering through %s...' % ext_prog)
 
     output,_ = Popen(ext_prog, shell=True, stdin=PIPE,
-                     stdout=PIPE).communicate(buff)
+                     stdout=PIPE, text=True).communicate(buff)
     out(f.outf, output)
   else:
     if g[1] == 'jemdoc':
@@ -1168,10 +1314,18 @@ def codeblock(f, g):
       out(f.outf, f.conf['codeblockend'])
 
 def prependnbsps(l):
+  """@brief 将行首空格转换为不换行空格。
+  @param l 当前源码行。
+  @return 转换结果或检测结果。
+  """
   g = re.search('(^ *)(.*)', l).groups()
   return g[0].replace(' ', '&nbsp;') + g[1]
 
 def inserttitle(f, t):
+  """@brief 输出网页窗口标题。
+  @param f 文件流或解析状态。
+  @param t 控制该转换步骤的参数。
+  """
   if t is not None:
     hb(f.outf, f.conf['doctitle'], t)
 
@@ -1182,6 +1336,9 @@ def inserttitle(f, t):
     hb(f.outf, f.conf['doctitleend'], t)
 
 def procfile(f):
+  """@brief 解析完整 jemdoc 文件并生成网页。
+  @param f 文件流或解析状态。
+  """
   f.linenum = 0
 
   menu = None
@@ -1352,13 +1509,13 @@ def procfile(f):
       # Quickly pull out the equation here:
       # Check we don't already have the terminating character in a whole-line
       # equation without linebreaks, eg \( Ax=b \):
-      if not s.strip().endswith('\)'):
+      if not s.strip().endswith('\\)'):
         while True:
           l = nl(f, codemode=True)
           if not l:
             break
           s += l
-          if l.strip() == '\)':
+          if l.strip() == '\\)':
             break
       out(f.outf, br(s.strip(), f))
 
@@ -1505,11 +1662,13 @@ def procfile(f):
     f.outf.close()
 
 def main():
+  """@brief 处理命令行参数并生成指定网页。
+  """
   if len(sys.argv) == 1 or sys.argv[1] in ('--help', '-h'):
     showhelp()
     raise SystemExit
   if sys.argv[1] == '--show-config':
-    print standardconf()
+    print(standardconf())
     raise SystemExit
   if sys.argv[1] == '--version':
     info()
@@ -1559,8 +1718,8 @@ def main():
     else:
       thisout = outname
 
-    infile = open(inname, 'rUb')
-    outfile = open(thisout, 'w')
+    infile = readsource(inname)
+    outfile = open(thisout, 'w', encoding='utf-8', newline='\n')
 
     f = controlstruct(infile, outfile, conf, inname)
     procfile(f)
