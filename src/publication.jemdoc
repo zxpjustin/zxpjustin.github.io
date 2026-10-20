@@ -3,6 +3,10 @@
 
 === Journal Papers
 
+- \[J3\] Fangzhou Wang, Qijing Wang, Lilas Alrahis, Bangqi Fu, Shui Jiang, *Xiaopeng Zhang*, Ozgur Sinanoglu, Tsung-Yi Ho, Evangeline F.Y. Young, and Johann Knechtel,
+“Trolloc: Logic locking and layout hardening for IC security closure against hardware trojans”,
+arXiv preprint arXiv:2405.05590, 2024.
+
 - \[J2\] Bentian Jiang, Jingsong Chen, Jinwei Liu, Lixin Liu, Fangzhou Wang, *Xiaopeng Zhang*, and Evangeline F.Y. Young,
 “CU.POKer: Placing DNNs on WSE with Optimal Kernel Sizing and Efﬁcient Protocol Optimization”, 
 accepted by IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems (*TCAD*), 2021.
@@ -15,6 +19,22 @@ IEEE Transactions on Multimedia, 2017.
 
 
 === Conference Papers
+
+- \[C11\] Qijing Wang, *Xiaopeng Zhang*, Martin D.F. Wong, and Evangeline F.Y. Young,
+“Controlayout: Conditional diffusion for style-controllable and violation-fixable layout pattern generation”,
+Proceedings of the Great Lakes Symposium on VLSI (*GLSVLSI*), 2024.
+
+- \[C10\] Fangzhou Wang, Qijing Wang, Bangqi Fu, Shui Jiang, *Xiaopeng Zhang*, Lilas Alrahis, Ozgur Sinanoglu, Johann Knechtel, Tsung-Yi Ho, and Evangeline F.Y. Young,
+“Security closure of IC layouts against hardware Trojans”,
+ACM International Symposium on Physical Design (*ISPD*), pp. 229-237, 2023.
+
+- \[C9\] *Xiaopeng Zhang*, Shoubo Hu, Zhitang Chen, Shengyu Zhu, Evangeline F.Y. Young, Pengyun Li, Cheng Chen, Yu Huang, and Jianye Hao,
+“RCANet: Root Cause Analysis via Latent Variable Interaction Modeling for Yield Improvement”,
+IEEE International Test Conference (*ITC*), pp. 100-107, 2022.
+
+- \[C8\] Jinwei Liu, *Xiaopeng Zhang*, Shiju Lin, Xinshi Zang, Jingsong Chen, Bentian Jiang, Martin D.F. Wong, and Evangeline F.Y. Young,
+“Partition and place finite element model on wafer-scale engine”,
+The 59th Annual Design Automation Conference (*DAC*), 2022.
 
 - \[C7\] *Xiaopeng Zhang*, Haoyu Yang and Evangeline F.Y. Young, 
 “Attentional Transfer is All You Need: Technology-aware Layout Pattern Generation”, 
