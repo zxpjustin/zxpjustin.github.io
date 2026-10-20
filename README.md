@@ -20,4 +20,4 @@ Windows 若 Python 3 命令为 `python` 或 `py -3`，将上述 `python3` 替换
 - TroLLoc：https://doi.org/10.1007/s41635-026-00177-1
 - CU.POKer：https://doi.org/10.1109/TCAD.2021.3096458
 
-奖学金只保留已知获奖年份 2018，不推定结束日期。DAC Young Fellow Award 按当前要求不添加。
+奖学金时间已由本人确认为 2018 - 2022。DAC Young Fellow Award 按当前要求不添加。
